@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import Template from './App.jsx'
-import './App.css';
+import template from './App.view.jsx'
 
 class App extends Component {
   render() {
-    return <Template/>;
+    return template.bind(this)();
   }
 }
 
