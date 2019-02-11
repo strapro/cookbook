@@ -4,7 +4,7 @@ import template from './RecipeCard.view.jsx'
 class RecipeCard extends Component {
   state = {
     expanded: false,
-    loading: false,
+    loading: true,
     error: false,
     recipe: {
       avatar: 'allrecipes.png',
