@@ -1,48 +1,65 @@
+.mockButton {
+  position: fixed !important;
+  right: 30px;
+  bottom: 30px;
+}
+
 .card {
   width: 400px;
   
-  .avatar {
-    background-color: red;
-  }
-
-  .loadingContainer{
-    display: inline-block;
+  .infoContainer{
     width: 100%;
-  }
-  
-  .loading {
-    display: block;
-    margin: 150px auto;
-  }
+    padding: 40px 25px;
+    box-sizing: border-box;
 
-  .media {
-    height: 0;
-    padding-top: 225px /* 16:9 */
-  }
-  
-  .description {
-    max-height: 120px;
-    overflow: hidden;
-  }
+    .moreInfo{
+      margin-top:190px;
+    }
 
-  .actions {
-    display: flex;
+    .loading {
+      display: block;
+      margin: 110px auto;
+    }
+
+    .errorIcon {
+      margin-top: 40px;
+    }
   }
   
-  .expand {
-    transform: rotate(0deg);
-    margin-left: auto;
-    transition: transform 0.1s
-  }
+  .recipe {
+    .avatar {
+      background-color: red;
+    }
   
-  .expandOpen {
-    transform: rotate(180deg);
-  }
+    .media {
+      height: 0;
+      padding-top: 225px /* 16:9 */
+    }
+    
+    .description {
+      max-height: 120px;
+      overflow: hidden;
+    }
   
-  .steps {
-    max-height: 190px;
-    overflow-y: scroll;
-    padding-bottom: 0 !important;
-    margin-bottom: 25px;
+    .actions {
+      display: flex;
+    }
+    
+    .expand {
+      transform: rotate(0deg);
+      margin-left: auto;
+      transition: transform 0.1s
+    }
+    
+    .expandOpen {
+      transform: rotate(180deg);
+    }
+    
+    .steps {
+      max-height: 190px;
+      overflow-y: scroll;
+      padding-bottom: 0 !important;
+      margin-bottom: 25px;
+    }
   }
 }

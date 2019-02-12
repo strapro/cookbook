@@ -9,7 +9,8 @@ class RecipeCard extends Component {
     expanded: false,
     loading: true,
     error: false,
-    recipe: {
+    recipe: null,
+    recipeTpl: {
       avatar: 'allrecipes.png',
       title: 'Shrimp and Chorizo Paella',
       subheader: 'September 14, 2016',
@@ -36,6 +37,38 @@ class RecipeCard extends Component {
         this.setState(state => ({ previousHeight: height }));
       }
     }, 500); 
+  }
+  
+  mockLoad = () => {
+    /* Set state to default. Loading, no error and no recipe */
+    this.setState(state => ({ 
+      loading: true,
+      error: false,
+      expanded: false,
+      recipe: null,
+    }));
+    
+    setTimeout(() => {
+      let random = Math.floor(Math.random() * 3) + 1  
+
+      if (random == 1){ // Loaded recipe succesfully
+        this.setState(state => ({ 
+          loading: false,
+          recipe: this.state.recipeTpl 
+        }));
+      }
+      else if (random == 2){ // No recipe found
+        this.setState(state => ({ 
+          loading: false,
+          recipe: null
+        }));
+      } else { // Error
+        this.setState(state => ({ 
+          loading: false,
+          error: true
+        }));
+      }
+    }, 2000); 
   }
 
   handleExpandClick = () => {
