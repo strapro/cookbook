@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Children } from 'react';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -21,94 +21,120 @@ import styles from './RecipeCard.module.scss';
 
 import Button from '@material-ui/core/Button'; //TODO remove the mockup stuff
 
+
+function Info(props) {
+  return (
+    <div className={styles.infoContainer} style={{height: props.previousHeight}}>
+      {(() => { 
+        if (props.loading) {
+          return (
+            <CircularProgress className={styles.loading}/>
+          )
+        } else if (props.error) {
+          return (
+            <React.Fragment>
+              <Typography variant="h2" align="center" gutterBottom color="secondary"><ErrorIcon fontSize="inherit" className={styles.errorIcon}/></Typography>
+              <Typography variant="subtitle2" align="center" gutterBottom>Something went wrong during the retrieval of the metadata. See the console for more info.</Typography>
+            </React.Fragment>
+          )
+        } else {
+          return (
+            <React.Fragment>
+              <Typography variant="h6" align="center" gutterBottom color="primary">No recipes found on this page.</Typography>
+              <Typography variant="subtitle2" align="center" gutterBottom>Please try visiting another page with recipes</Typography>
+              <Typography variant="caption" gutterBottom className={styles.moreInfo}>
+                This extension works by looking for the <Link href="http://microformats.org/wiki/h-recipe" color="secondary" target="_blank">h-recipe microformat</Link>. If the site has not implemented this format then the extension will not pickup the needed metadata :(
+              </Typography>
+            </React.Fragment>
+          )              
+        }
+      })()}
+    </div>
+  )
+}
+
+function Recipe(props) {
+  return (
+    <Fade in={true}>
+      <div className={styles.recipe}>
+        <CardHeader
+          avatar={
+            <Avatar aria-label="Recipe" src={props.recipe.avatar} className={styles.avatar}/>
+          }
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={props.recipe.title}
+          subheader={props.recipe.subheader}
+        />
+        <CardMedia
+          className={styles.media}
+          image={props.recipe.image}
+          title={props.recipe.title}
+        />
+        <CardContent className={styles.description}>
+          <Typography component="p">
+            {props.recipe.description}
+          </Typography>
+        </CardContent>
+        <CardActions className={styles.actions} disableActionSpacing>
+          <IconButton aria-label="Add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="Share">
+            <ShareIcon />
+          </IconButton>
+          <IconButton
+            className={classnames(styles.expand, {
+              [styles.expandOpen]: props.expanded,
+            })}
+            onClick={props.handleExpandClick}
+            aria-expanded={props.expanded}
+            aria-label="Show more"
+          >
+            <ExpandMoreIcon />
+          </IconButton>
+        </CardActions>
+        <Collapse in={props.expanded} timeout="auto" unmountOnExit>
+          <CardContent className={styles.steps}>
+            {props.recipe.steps.map((step, index) => {
+              return <Typography key={index} paragraph>{step}</Typography>
+            })}
+          </CardContent>
+        </Collapse>
+      </div>
+    </Fade>
+  );
+}
+
+function MockButtons(props) {
+  return (
+    <div className={styles.mockButton}>
+      <Button variant="contained" color="primary" onClick={ () => props.mockLoad(1)}>
+          Mock success
+        </Button>
+        <Button variant="contained" onClick={() => props.mockLoad(2)}>
+          Mock empty
+        </Button>
+        <Button variant="contained" color="secondary" onClick={() => props.mockLoad(3)}>
+          Mock error
+      </Button>
+    </div>
+  );
+}
+
 export default function template() {
   return (
     <Card className={styles.card}>
       <Collapse in={this.state.recipe !== null} collapsedHeight="365px">
-          {(() => { 
-            if (this.state.loading) {
-              return (
-                <div className={styles.infoContainer} style={{height: this.state.previousHeight}}>
-                  <CircularProgress className={styles.loading}/>
-                </div>
-              )
-            } else if (this.state.error) {
-              return (
-                <div className={styles.infoContainer} style={{height: this.state.previousHeight}}>
-                  <Typography variant="h2" align="center" gutterBottom color="secondary"><ErrorIcon fontSize="inherit" className={styles.errorIcon}/></Typography>
-                  <Typography variant="subtitle2" align="center" gutterBottom>Something went wrong during the retrieval of the metadata. See the console for more info.</Typography>
-                </div>
-              )
-            } else if (this.state.recipe === null) {
-              return (
-                <div className={styles.infoContainer} style={{height: this.state.previousHeight}}>
-                  <Typography variant="h6" align="center" gutterBottom color="primary">No recipes found on this page.</Typography>
-                  <Typography variant="subtitle2" align="center" gutterBottom>Please try visiting another page with recipes</Typography>
-                  <Typography variant="caption" gutterBottom className={styles.moreInfo}>
-                    This extension works by looking for the <Link href="http://microformats.org/wiki/h-recipe" color="secondary" target="_blank">h-recipe microformat</Link>. If the site has not implemented this format then the extension will not pickup the needed metadata :(
-                  </Typography>
-                </div>
-              )              
-            } else {
-              return (
-                <Fade in={true}>
-                  <div className={styles.recipe}>
-                    <CardHeader
-                      avatar={
-                        <Avatar aria-label="Recipe" src={this.state.recipe.avatar} className={styles.avatar}/>
-                      }
-                      action={
-                        <IconButton>
-                          <MoreVertIcon />
-                        </IconButton>
-                      }
-                      title={this.state.recipe.title}
-                      subheader={this.state.recipe.subheader}
-                    />
-                    <CardMedia
-                      className={styles.media}
-                      image={this.state.recipe.image}
-                      title={this.state.recipe.title}
-                    />
-                    <CardContent className={styles.description}>
-                      <Typography component="p">
-                        {this.state.recipe.description}
-                      </Typography>
-                    </CardContent>
-                    <CardActions className={styles.actions} disableActionSpacing>
-                      <IconButton aria-label="Add to favorites">
-                        <FavoriteIcon />
-                      </IconButton>
-                      <IconButton aria-label="Share">
-                        <ShareIcon />
-                      </IconButton>
-                      <IconButton
-                        className={classnames(styles.expand, {
-                          [styles.expandOpen]: this.state.expanded,
-                        })}
-                        onClick={this.handleExpandClick}
-                        aria-expanded={this.state.expanded}
-                        aria-label="Show more"
-                      >
-                        <ExpandMoreIcon />
-                      </IconButton>
-                    </CardActions>
-                    <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                      <CardContent className={styles.steps}>
-                        {this.state.recipe.steps.map((step, index) => {
-                          return <Typography key={index} paragraph>{step}</Typography>
-                        })}
-                      </CardContent>
-                    </Collapse>
-                  </div>
-                </Fade>
-              )
-            }
-          })()}
+        { this.state.recipe
+          ? <Recipe recipe={this.state.recipe} expanded={this.state.expanded} handleExpandClick={this.handleExpandClick}/>
+          : <Info previousHeight={this.state.previousHeight} loading={this.state.loading} error={this.state.error}/>
+        }
       </Collapse>
-      <Button variant="contained" color="primary" className={styles.mockButton} onClick={this.mockLoad}>
-        Mock Load
-      </Button>
+      <MockButtons mockLoad={this.mockLoad}/>
     </Card>
   );
 };

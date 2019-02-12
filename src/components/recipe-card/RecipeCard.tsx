@@ -39,7 +39,7 @@ class RecipeCard extends Component {
     }, 500); 
   }
   
-  mockLoad = () => {
+  mockLoad = (state: number) => {
     /* Set state to default. Loading, no error and no recipe */
     this.setState(state => ({ 
       loading: true,
@@ -49,15 +49,13 @@ class RecipeCard extends Component {
     }));
     
     setTimeout(() => {
-      let random = Math.floor(Math.random() * 3) + 1  
-
-      if (random == 1){ // Loaded recipe succesfully
+      if (state == 1){ // Loaded recipe succesfully
         this.setState(state => ({ 
           loading: false,
           recipe: this.state.recipeTpl 
         }));
       }
-      else if (random == 2){ // No recipe found
+      else if (state == 2){ // No recipe found
         this.setState(state => ({ 
           loading: false,
           recipe: null
