@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import template from './RecipeCard.view.jsx'
 
 class RecipeCard extends Component {
+  domElement: HTMLElement;
   state = {
+    previousHeight: 365,
     expanded: false,
     loading: true,
     error: false,
@@ -19,7 +22,20 @@ class RecipeCard extends Component {
         'Set aside off of the heat to let rest for 10 minutes, and then serve.'
       ]
     },
-    
+  }
+
+  componentDidMount = () => {
+    this.domElement = ReactDOM.findDOMNode(this) as HTMLElement;
+  }
+
+  componentDidUpdate = () => {
+    setTimeout(() => {
+      let height = this.domElement.offsetHeight ? this.domElement.offsetHeight : 365;
+      
+      if (this.state.previousHeight != height){
+        this.setState(state => ({ previousHeight: height }));
+      }
+    }, 500); 
   }
 
   handleExpandClick = () => {

@@ -1,17 +1,15 @@
 .card {
   width: 400px;
-  padding-bottom: 25px;
-  max-height: 750px;
-  transition: max-height 1s;
-
-  &.card_loading {
-    max-height: 360px;
-  }
-
+  
   .avatar {
     background-color: red;
   }
 
+  .loadingContainer{
+    display: inline-block;
+    width: 100%;
+  }
+  
   .loading {
     display: block;
     margin: 150px auto;
@@ -45,5 +43,6 @@
     max-height: 190px;
     overflow-y: scroll;
     padding-bottom: 0 !important;
+    margin-bottom: 25px;
   }
 }

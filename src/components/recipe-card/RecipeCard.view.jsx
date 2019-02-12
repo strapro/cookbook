@@ -18,67 +18,73 @@ import Fade from '@material-ui/core/Fade';
 import styles from './RecipeCard.module.scss';
 
 export default function template() {
-  if (this.state.loading) {
-    return (
-      <Card className={classnames(styles.card, styles.card_loading)}>
-        <CircularProgress className={styles.loading}/>
-      </Card>
-    );
-  } else {
-    return ( 
-      <Card className={styles.card}>
-        <Fade in={!this.state.loading}>
-          <div>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="Recipe" src={this.state.recipe.avatar} className={styles.avatar}/>
-              }
-              action={
-                <IconButton>
-                  <MoreVertIcon />
-                </IconButton>
-              }
-              title={this.state.recipe.title}
-              subheader={this.state.recipe.subheader}
-            />
-            <CardMedia
-              className={styles.media}
-              image={this.state.recipe.image}
-              title={this.state.recipe.title}
-            />
-            <CardContent className={styles.description}>
-              <Typography component="p">
-                {this.state.recipe.description}
-              </Typography>
-            </CardContent>
-            <CardActions className={styles.actions} disableActionSpacing>
-              <IconButton aria-label="Add to favorites">
-                <FavoriteIcon />
-              </IconButton>
-              <IconButton aria-label="Share">
-                <ShareIcon />
-              </IconButton>
-              <IconButton
-                className={classnames(styles.expand, {
-                  [styles.expandOpen]: this.state.expanded,
-                })}
-                onClick={this.handleExpandClick}
-                aria-expanded={this.state.expanded}
-                aria-label="Show more"
-              >
-                <ExpandMoreIcon />
-              </IconButton>
-            </CardActions>
-            <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-              <CardContent className={styles.steps}>
-                {this.state.recipe.steps.map((step, index) => {
-                  return <Typography key={index} paragraph>{step}</Typography>
-                })}
-              </CardContent>
-            </Collapse>
-          </div>
-        </Fade>
-      </Card>
-    );
-  }
+  return (
+    <Card className={styles.card}>
+      <Collapse in={!this.state.loading} collapsedHeight="365px">
+          {(() => { 
+            if (this.state.loading) {
+              return (
+                <div className={styles.loadingContainer} style={{height: this.state.previousHeight}}>
+                  <CircularProgress className={styles.loading}/>
+                </div>
+              )
+            } else {
+              return (
+                <Fade in={!this.state.loading}>
+                  <div>
+                    <CardHeader
+                      avatar={
+                        <Avatar aria-label="Recipe" src={this.state.recipe.avatar} className={styles.avatar}/>
+                      }
+                      action={
+                        <IconButton>
+                          <MoreVertIcon />
+                        </IconButton>
+                      }
+                      title={this.state.recipe.title}
+                      subheader={this.state.recipe.subheader}
+                    />
+                    <CardMedia
+                      className={styles.media}
+                      image={this.state.recipe.image}
+                      title={this.state.recipe.title}
+                    />
+                    <CardContent className={styles.description}>
+                      <Typography component="p">
+                        {this.state.recipe.description}
+                      </Typography>
+                    </CardContent>
+                    <CardActions className={styles.actions} disableActionSpacing>
+                      <IconButton aria-label="Add to favorites">
+                        <FavoriteIcon />
+                      </IconButton>
+                      <IconButton aria-label="Share">
+                        <ShareIcon />
+                      </IconButton>
+                      <IconButton
+                        className={classnames(styles.expand, {
+                          [styles.expandOpen]: this.state.expanded,
+                        })}
+                        onClick={this.handleExpandClick}
+                        aria-expanded={this.state.expanded}
+                        aria-label="Show more"
+                      >
+                        <ExpandMoreIcon />
+                      </IconButton>
+                    </CardActions>
+                    <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                      <CardContent className={styles.steps}>
+                        {this.state.recipe.steps.map((step, index) => {
+                          return <Typography key={index} paragraph>{step}</Typography>
+                        })}
+                      </CardContent>
+                    </Collapse>
+                  </div>
+                </Fade>
+              )
+            }
+          })()}
+      </Collapse>
+    </Card>
+  );
 };
