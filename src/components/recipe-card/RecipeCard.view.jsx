@@ -21,38 +21,6 @@ import styles from './RecipeCard.module.scss';
 
 import Button from '@material-ui/core/Button'; //TODO remove the mockup stuff
 
-
-function Info(props) {
-  return (
-    <div className={styles.infoContainer} style={{height: props.previousHeight}}>
-      {(() => { 
-        if (props.loading) {
-          return (
-            <CircularProgress className={styles.loading}/>
-          )
-        } else if (props.error) {
-          return (
-            <React.Fragment>
-              <Typography variant="h2" align="center" gutterBottom color="secondary"><ErrorIcon fontSize="inherit" className={styles.errorIcon}/></Typography>
-              <Typography variant="subtitle2" align="center" gutterBottom>Something went wrong during the retrieval of the metadata. See the console for more info.</Typography>
-            </React.Fragment>
-          )
-        } else {
-          return (
-            <React.Fragment>
-              <Typography variant="h6" align="center" gutterBottom color="primary">No recipes found on this page.</Typography>
-              <Typography variant="subtitle2" align="center" gutterBottom>Please try visiting another page with recipes</Typography>
-              <Typography variant="caption" gutterBottom className={styles.moreInfo}>
-                This extension works by looking for the <Link href="http://microformats.org/wiki/h-recipe" color="secondary" target="_blank">h-recipe microformat</Link>. If the site has not implemented this format then the extension will not pickup the needed metadata :(
-              </Typography>
-            </React.Fragment>
-          )              
-        }
-      })()}
-    </div>
-  )
-}
-
 function Recipe(props) {
   return (
     <Fade in={true}>
@@ -107,6 +75,37 @@ function Recipe(props) {
       </div>
     </Fade>
   );
+}
+
+function Info(props) {
+  return (
+    <div className={styles.infoContainer} style={{height: props.previousHeight}}>
+      {(() => { 
+        if (props.loading) {
+          return (
+            <CircularProgress className={styles.loading}/>
+          )
+        } else if (props.error) {
+          return (
+            <React.Fragment>
+              <Typography variant="h2" align="center" gutterBottom color="secondary"><ErrorIcon fontSize="inherit" className={styles.errorIcon}/></Typography>
+              <Typography variant="subtitle2" align="center" gutterBottom>Something went wrong during the retrieval of the metadata. See the console for more info.</Typography>
+            </React.Fragment>
+          )
+        } else {
+          return (
+            <React.Fragment>
+              <Typography variant="h6" align="center" gutterBottom color="primary">No recipes found on this page.</Typography>
+              <Typography variant="subtitle2" align="center" gutterBottom>Please try visiting another page with recipes</Typography>
+              <Typography variant="caption" gutterBottom className={styles.moreInfo}>
+                This extension works by looking for the <Link href="http://microformats.org/wiki/h-recipe" color="secondary" target="_blank">h-recipe microformat</Link>. If the site has not implemented this format then the extension will not pickup the needed metadata :(
+              </Typography>
+            </React.Fragment>
+          )              
+        }
+      })()}
+    </div>
+  )
 }
 
 function MockButtons(props) {
