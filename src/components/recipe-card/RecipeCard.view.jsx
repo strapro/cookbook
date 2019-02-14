@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -19,7 +19,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import styles from './RecipeCard.module.scss';
 
-import Button from '@material-ui/core/Button'; //TODO remove the mockup stuff
+//TODO remove the mockup stuff
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 function Recipe(props) {
   return (
@@ -111,6 +113,13 @@ function Info(props) {
 function MockButtons(props) {
   return (
     <div className={styles.mockButton}>
+      <TextField
+        id="standard-with-placeholder"
+        label="Recipe URL"
+        placeholder="http://allrecipes.com/most_tasty/recipe"
+        className={styles.textField}
+        margin="normal"
+      />
       <Button variant="contained" color="primary" onClick={ () => props.mockLoad(1)}>
           Mock success
         </Button>

@@ -9,6 +9,8 @@
     "@types/node": "10.12.21",
     "@types/react": "16.8.1",
     "@types/react-dom": "16.0.11",
+    "html-metadata": "git://github.com/wikimedia/html-metadata.git",
+    "htmlmetaparser": "^1.2.1",
     "node-sass": "^4.11.0",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
