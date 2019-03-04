@@ -55,27 +55,27 @@ export default class RecipeExtractor {
 
 
     private getAvatar(metadata: metaparser.Result): string {
-        // if (metadata.icons && metadata.icons.length > 0) {
-        //     const icons = metadata.icons.filter((icon) => {
-        //         return icon.href.indexOf('data:') === -1;
-        //     });
+        if (metadata.icons && metadata.icons.length > 0) {
+            const icons = metadata.icons.filter((icon) => {
+                return icon.href.indexOf('data:') === -1;
+            });
 
-        //     icons.sort((icon1, icon2) => {
-        //         const icon1Size = icon1.sizes ? parseInt(icon1.sizes) : 0,
-        //             icon2Size = icon2.sizes ? parseInt(icon2.sizes) : 0;
+            icons.sort((icon1, icon2) => {
+                const icon1Size = icon1.sizes ? parseInt(icon1.sizes) : 0,
+                    icon2Size = icon2.sizes ? parseInt(icon2.sizes) : 0;
 
-        //         if (icon1Size < icon2Size) {
-        //             return 1;
-        //         }
-        //         if (icon1Size > icon2Size) {
-        //             return -1;
-        //         }
+                if (icon1Size < icon2Size) {
+                    return 1;
+                }
+                if (icon1Size > icon2Size) {
+                    return -1;
+                }
                 
-        //         return 0;
-        //     })
+                return 0;
+            })
 
-        //     return metadata.icons[0].href;
-        // }
+            return metadata.icons[0].href;
+        }
         
         return 'recipe.png';
     }
