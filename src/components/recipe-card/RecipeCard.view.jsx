@@ -119,14 +119,16 @@ function MockButtons(props) {
         placeholder="http://allrecipes.com/most_tasty/recipe"
         className={styles.textField}
         margin="normal"
+        value={props.value}
+        onChange={props.onChange}
       />
-      <Button variant="contained" color="primary" onClick={ () => props.mockLoad(1)}>
+      <Button variant="contained" color="primary" onClick={ () => props.handleLoad(1)}>
           Mock success
         </Button>
-        <Button variant="contained" onClick={() => props.mockLoad(2)}>
+        <Button variant="contained" onClick={() => props.handleLoad(2)}>
           Mock empty
         </Button>
-        <Button variant="contained" color="secondary" onClick={() => props.mockLoad(3)}>
+        <Button variant="contained" color="secondary" onClick={() => props.handleLoad(3)}>
           Mock error
       </Button>
     </div>
@@ -142,7 +144,7 @@ export default function template() {
           : <Info previousHeight={this.state.previousHeight} loading={this.state.loading} error={this.state.error}/>
         }
       </Collapse>
-      <MockButtons mockLoad={this.mockLoad}/>
+      <MockButtons value={this.state.url} handleLoad={this.handleLoad} onChange={this.handleInputChange}/>
     </Card>
   );
 };
