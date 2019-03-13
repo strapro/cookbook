@@ -1,6 +1,8 @@
 import * as metaparser from 'htmlmetaparser'
 import * as htmlparser from 'htmlparser2'
 import Recipe from '../models/recipe';
+import { isArray, isString } from 'util';
+import { ninvoke } from 'q';
 
 export default class RecipeExtractor {
     public async getRecipe(url: string): Promise<Recipe> {
@@ -97,6 +99,30 @@ export default class RecipeExtractor {
     }
 
     private getImage(metadata: metaparser.Result): string {
+        if(metadata.jsonld) {
+            let recipe = this.getSingleFromArray(metadata.jsonld, (item) => item['@type'] === 'Recipe');
+
+            if(recipe) {
+                return this.getActualImage(this.getSingleFromArray(recipe.image));
+            }
+        }
+
+        if(metadata.microdata && metadata.microdata['@graph']) {
+            let recipe = this.getSingleFromArray(metadata.microdata['@graph'], (item) => item['@type'] === 'Recipe');
+        
+            if(recipe) {
+                return this.getActualImage(this.getSingleFromArray(recipe.image));
+            }
+        } 
+        
+        if(metadata.rdfa && metadata.rdfa['@graph']) {
+            let recipe = this.getSingleFromArray(metadata.rdfa['@graph'], (item) => item['og:image'] !== undefined);
+            
+            if(recipe) {
+                return this.getActualImage(recipe['og:image']);                 
+            }
+        }
+
         return 'paella.jpg';
     }
 
@@ -111,5 +137,30 @@ export default class RecipeExtractor {
             'Add rice and stir very gently to distribute. Top with artichokes and peppers, and cook without stirring, until most of the liquid is absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved shrimp and mussels, tucking them down into the rice, and cook again without stirring, until mussels have opened and rice is just tender, 5 to 7 minutes more. (Discard any mussels that don’t open.)',
             'Set aside off of the heat to let rest for 10 minutes, and then serve.'
         ];
+    }
+
+    private getSingleFromArray<T>(items: T | Array<T>, filterPredicate?: (item: T) => boolean): T | null {
+        if(!isArray(items)) {
+            items = [items];
+        }
+    
+        if(filterPredicate) {
+            let filtered = items.filter((item) => {
+                return filterPredicate(item);
+            });
+
+            return filtered.length > 0 ? filtered[0] : null;
+        }
+
+        return items[0];
+    }
+
+    private getActualImage(image: {[key: string]: string} | string): string {
+        if(isString(image)) return image;
+
+        if(image['@value']) return image['@value'];
+        if(image['url']) return image['url'];
+
+        return '';
     }
 }
