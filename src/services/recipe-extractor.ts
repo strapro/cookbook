@@ -2,7 +2,6 @@ import * as metaparser from 'htmlmetaparser'
 import * as htmlparser from 'htmlparser2'
 import Recipe from '../models/recipe';
 import { isArray, isString } from 'util';
-import { ninvoke } from 'q';
 
 export default class RecipeExtractor {
     public async getRecipe(url: string): Promise<Recipe> {
@@ -17,7 +16,7 @@ export default class RecipeExtractor {
             steps: this.getSteps(meta),
         };
     }
-      
+
     //==============================================================================================================================
 
     private async getMetadata(url: string): Promise<metaparser.Result> {
@@ -31,7 +30,7 @@ export default class RecipeExtractor {
                     url: this.baseUrl(url) // The HTML pages URL is used to resolve relative URLs.
                 }
             ),
-            parser = new htmlparser.Parser(handler, { decodeEntities: true });
+                parser = new htmlparser.Parser(handler, { decodeEntities: true });
 
             parser.write(await this.getHtml(url));
             parser.done();
@@ -45,18 +44,19 @@ export default class RecipeExtractor {
     }
 
     private baseUrl(url: string): string {
-        const pathArray = url.split( '/' ),
+        const pathArray = url.split('/'),
             protocol = pathArray[0],
             host = pathArray[2],
             baseUrl = protocol + '//' + host;
 
-        return baseUrl; 
+        return baseUrl;
     }
 
     //==============================================================================================================================
 
 
     private getAvatar(metadata: metaparser.Result): string {
+        // TODO icons can be better populated. Check out https://www.bbcgoodfood.com/recipes/easy-chicken-burritos example
         if (metadata.icons && metadata.icons.length > 0) {
             const icons = metadata.icons.filter((icon) => {
                 return icon.href.indexOf('data:') === -1;
@@ -72,24 +72,48 @@ export default class RecipeExtractor {
                 if (icon1Size > icon2Size) {
                     return -1;
                 }
-                
+
                 return 0;
             })
 
-            return metadata.icons[0].href;
+            return icons[0].href;
         }
-        
+
         return 'recipe.png';
     }
 
     private getTitle(metadata: metaparser.Result): string {
-        return 'Shrimp and Chorizo Paella';
+        if (metadata.jsonld) {
+            let recipe = this.getSingleFromArray(metadata.jsonld, (item) => item['@type'] === 'Recipe');
+
+            if (recipe) {
+                return this.getActualTitle(recipe.name);
+            }
+        }
+
+        if (metadata.microdata && metadata.microdata['@graph']) {
+            let recipe = this.getSingleFromArray(metadata.microdata['@graph'], (item) => item['@type'] === 'Recipe');
+
+            if (recipe) {
+                return this.getActualTitle(recipe.name);
+            }
+        }
+
+        if (metadata.rdfa && metadata.rdfa['@graph']) {
+            let recipe = this.getSingleFromArray(metadata.rdfa['@graph'], (item) => item['og:image'] !== undefined);
+
+            if (recipe) {
+                return this.getActualTitle(this.getSingleFromArray(recipe['og:title']));
+            }
+        }
+
+        return 'Recipe';
     }
 
     private getSubheader(metadata: metaparser.Result): string {
         if (metadata.html) {
             const url = (metadata.html.canonical ? this.baseUrl(metadata.html.canonical) : metadata.html.author) || '';
-            
+
             return url
                 .replace('https://', '')
                 .replace('http://', '')
@@ -99,31 +123,31 @@ export default class RecipeExtractor {
     }
 
     private getImage(metadata: metaparser.Result): string {
-        if(metadata.jsonld) {
+        if (metadata.jsonld) {
             let recipe = this.getSingleFromArray(metadata.jsonld, (item) => item['@type'] === 'Recipe');
 
-            if(recipe) {
+            if (recipe) {
                 return this.getActualImage(this.getSingleFromArray(recipe.image));
             }
         }
 
-        if(metadata.microdata && metadata.microdata['@graph']) {
+        if (metadata.microdata && metadata.microdata['@graph']) {
             let recipe = this.getSingleFromArray(metadata.microdata['@graph'], (item) => item['@type'] === 'Recipe');
-        
-            if(recipe) {
+
+            if (recipe) {
                 return this.getActualImage(this.getSingleFromArray(recipe.image));
-            }
-        } 
-        
-        if(metadata.rdfa && metadata.rdfa['@graph']) {
-            let recipe = this.getSingleFromArray(metadata.rdfa['@graph'], (item) => item['og:image'] !== undefined);
-            
-            if(recipe) {
-                return this.getActualImage(recipe['og:image']);                 
             }
         }
 
-        return 'paella.jpg';
+        if (metadata.rdfa && metadata.rdfa['@graph']) {
+            let recipe = this.getSingleFromArray(metadata.rdfa['@graph'], (item) => item['og:image'] !== undefined);
+
+            if (recipe) {
+                return this.getActualImage(recipe['og:image']);
+            }
+        }
+
+        return 'recipe_cover.png';
     }
 
     private getDescription(metadata: metaparser.Result): string {
@@ -140,11 +164,11 @@ export default class RecipeExtractor {
     }
 
     private getSingleFromArray<T>(items: T | Array<T>, filterPredicate?: (item: T) => boolean): T | null {
-        if(!isArray(items)) {
+        if (!isArray(items)) {
             items = [items];
         }
-    
-        if(filterPredicate) {
+
+        if (filterPredicate) {
             let filtered = items.filter((item) => {
                 return filterPredicate(item);
             });
@@ -155,11 +179,19 @@ export default class RecipeExtractor {
         return items[0];
     }
 
-    private getActualImage(image: {[key: string]: string} | string): string {
-        if(isString(image)) return image;
+    private getActualTitle(title: { [key: string]: string } | string): string {
+        if (isString(title)) return title;
 
-        if(image['@value']) return image['@value'];
-        if(image['url']) return image['url'];
+        if (title['@value']) return title['@value'];
+
+        return '';
+    }
+
+    private getActualImage(image: { [key: string]: string } | string): string {
+        if (isString(image)) return image;
+
+        if (image['@value']) return image['@value'];
+        if (image['url']) return image['url'];
 
         return '';
     }

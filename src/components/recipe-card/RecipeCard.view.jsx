@@ -36,7 +36,9 @@ function Recipe(props) {
               <MoreVertIcon />
             </IconButton>
           }
+          classes={{content: styles.content}}
           title={props.recipe.title}
+          titleTypographyProps={{noWrap: true}}
           subheader={props.recipe.subheader}
         />
         <CardMedia

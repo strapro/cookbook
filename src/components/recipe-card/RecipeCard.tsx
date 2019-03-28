@@ -23,16 +23,16 @@ class RecipeCard extends Component {
   componentDidUpdate = () => {
     setTimeout(() => {
       let height = this.domElement.offsetHeight ? this.domElement.offsetHeight : 365;
-      
-      if (this.state.previousHeight != height){
+
+      if (this.state.previousHeight != height) {
         this.setState(state => ({ previousHeight: height }));
       }
-    }, 500); 
+    }, 500);
   }
 
   handleLoad = async (state: number) => {
     /* Set state to default. Loading, no error and no recipe */
-    this.setState(state => ({ 
+    this.setState(state => ({
       loading: true,
       error: false,
       expanded: false,
@@ -40,20 +40,20 @@ class RecipeCard extends Component {
     }));
 
     const parsedRecipe = await this.recipeExtractor.getRecipe(this.state.url);
-    
-    if (state == 1){ // Loaded recipe succesfully
-      this.setState(state => ({ 
+
+    if (state == 1) { // Loaded recipe succesfully
+      this.setState(state => ({
         loading: false,
-        recipe: parsedRecipe 
+        recipe: parsedRecipe
       }));
     }
-    else if (state == 2){ // No recipe found
-      this.setState(state => ({ 
+    else if (state == 2) { // No recipe found
+      this.setState(state => ({
         loading: false,
         recipe: null
       }));
     } else { // Error
-      this.setState(state => ({ 
+      this.setState(state => ({
         loading: false,
         error: true
       }));
@@ -67,7 +67,7 @@ class RecipeCard extends Component {
   handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     let newUrl = event.target.value;
 
-    this.setState(state => ({url: newUrl}));
+    this.setState(state => ({ url: newUrl }));
   }
 
   render = () => {
