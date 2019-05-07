@@ -66,7 +66,7 @@ function Recipe(props) {
             aria-expanded={props.expanded}
             aria-label="Show more"
           >
-            <ExpandMoreIcon />
+            <ExpandMoreIcon style={{display: props.recipe.steps.length > 0 ? 'block' : 'none' }}/>
           </IconButton>
         </CardActions>
         <Collapse in={props.expanded} timeout="auto" unmountOnExit>
@@ -125,7 +125,7 @@ function MockButtons(props) {
         onChange={props.onChange}
       />
       <Button variant="contained" color="primary" onClick={ () => props.handleLoad(1)}>
-          Mock success
+          Scrap
         </Button>
         <Button variant="contained" onClick={() => props.handleLoad(2)}>
           Mock empty

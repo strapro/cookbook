@@ -1,10 +1,16 @@
 import React, { Component, ChangeEvent } from 'react';
 import ReactDOM from 'react-dom';
 import template from './RecipeCard.view.jsx'
-import RecipeExtractor from '../../services/recipe-extractor';
+import Scrapper from '../../services/html-scrapper/scrapper';
+import NetworkScrapper from '../../services/html-scrapper/network';
+import MetadataExtractor from '../../services/metadata-extractor/extractor';
+import RecipeExtractor from '../../services/recipe-extractor/extractor';
 
 class RecipeCard extends Component {
+  htmlScrapper: Scrapper
+  metadataExtractor: MetadataExtractor
   recipeExtractor: RecipeExtractor;
+
   domElement: HTMLElement;
   state = {
     url: '',
@@ -16,7 +22,10 @@ class RecipeCard extends Component {
   }
 
   componentDidMount = () => {
+    this.htmlScrapper =  new NetworkScrapper();
+    this.metadataExtractor = new MetadataExtractor();
     this.recipeExtractor = new RecipeExtractor();
+
     this.domElement = ReactDOM.findDOMNode(this) as HTMLElement;
   }
 
@@ -39,7 +48,9 @@ class RecipeCard extends Component {
       recipe: null,
     }));
 
-    const parsedRecipe = await this.recipeExtractor.getRecipe(this.state.url);
+    const html = await this.htmlScrapper.getHtml(this.state.url);
+    const metadata = await this.metadataExtractor.getMetadata(this.state.url, html);
+    const parsedRecipe = this.recipeExtractor.getRecipe(metadata);
 
     if (state == 1) { // Loaded recipe succesfully
       this.setState(state => ({

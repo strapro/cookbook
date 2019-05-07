@@ -1,14 +1,6 @@
 # Sample sites #
 
-## Microdata ##
-https://cookpad.com/gr/sintages/7248593-almuro-keik-manitarion
-https://www.argiro.gr/recipe/banoffee-dipli-apolausi
-https://www.allrecipes.com/recipe/233259/surf-and-turf-for-two
-https://www.thekitchn.com/mahogany-chocolate-cake-265853
-https://www.bbcgoodfood.com/recipes/easy-chicken-burritos
-
 ## Jsonld ##
-http://www.funkycook.gr/xorta-tsigariasta-auga-feta
 https://www.mamapeinao.gr/xoirines-mprizoles-sto-fourno
 https://akispetretzikis.com/el/categories/kreas/choirino-me-glykoxinh-saltsa
 http://www.foodnetwork.co.uk/recipes/totally-lazy-mini-sausage-rolls.html
@@ -16,6 +8,14 @@ https://www.taste.com.au/recipes/spicy-chicken-chickpea-hotpot/t5yne9e9
 https://www.hellofresh.ca/recipes/miso-pesto-shrimp-ramen-5bd1f0e7ae08b512564a9a22?locale=en-CA
 https://www.delish.com/cooking/recipe-ideas/a20534727/lemon-poppy-seed-pancakes-recipe
 https://www.skinnytaste.com/banana-foster-crepes
+
+## Microdata ##
+http://www.funkycook.gr/xorta-tsigariasta-auga-feta
+https://cookpad.com/gr/sintages/7248593-almuro-keik-manitarion
+https://www.argiro.gr/recipe/banoffee-dipli-apolausi
+https://www.allrecipes.com/recipe/233259/surf-and-turf-for-two
+https://www.thekitchn.com/mahogany-chocolate-cake-265853
+https://www.bbcgoodfood.com/recipes/easy-chicken-burritos
 
 ## Rfda ##
 https://www.yiannislucacos.gr/recipe/kotopoylo-poylerika-eortastiko-geyma/7555/kotopoylo-ston-foyrno-me-hristoygenniatiki-gemisi
