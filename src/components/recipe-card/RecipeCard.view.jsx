@@ -19,10 +19,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Fade from '@material-ui/core/Fade';
 import styles from './RecipeCard.module.scss';
 
-//TODO remove the mockup stuff
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-
 function Recipe(props) {
     return (
         <Fade in={true}>
@@ -112,41 +108,15 @@ function Info(props) {
     )
 }
 
-function MockButtons(props) {
-    return (
-        <div className={styles.mockButton}>
-            <TextField
-                id="standard-with-placeholder"
-                label="Recipe URL"
-                placeholder="http://allrecipes.com/most_tasty/recipe"
-                className={styles.textField}
-                margin="normal"
-                value={props.value}
-                onChange={props.onChange}
-            />
-            <Button variant="contained" color="primary" onClick={() => props.handleLoad(1)}>
-                Scrap
-            </Button>
-            <Button variant="contained" onClick={() => props.handleLoad(2)}>
-                Mock empty
-            </Button>
-            <Button variant="contained" color="secondary" onClick={() => props.handleLoad(3)}>
-                Mock error
-            </Button>
-        </div>
-    );
-}
-
 export default function template() {
     return (
         <Card className={styles.card}>
-            <Collapse in={this.state.recipe !== null} collapsedHeight="365px">
-                { this.state.recipe
-                    ? <Recipe recipe={this.state.recipe} expanded={this.state.expanded} handleExpandClick={this.handleExpandClick}/>
-                    : <Info previousHeight={this.state.previousHeight} loading={this.state.loading} error={this.state.error}/>
+            <Collapse in={this.props.recipe !== undefined} collapsedHeight="365px">
+                { this.props.recipe
+                    ? <Recipe recipe={this.props.recipe} expanded={this.state.expanded} handleExpandClick={this.handleExpandClick}/>
+                    : <Info previousHeight={this.state.previousHeight} loading={this.props.loading} error={this.props.error}/>
                 }
             </Collapse>
-            <MockButtons value={this.state.url} handleLoad={this.handleLoad} onChange={this.handleInputChange}/>
         </Card>
     );
 };

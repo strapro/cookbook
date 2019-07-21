@@ -21,7 +21,7 @@ export default class AvatarExtractor extends BaseExtractor {
                 }
 
                 return 0;
-            })
+            });
 
             return icons[0].href;
         }

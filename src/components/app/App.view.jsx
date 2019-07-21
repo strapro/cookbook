@@ -1,14 +1,20 @@
 import React from 'react';
 import styles from './App.module.scss';
-import logo from '../../logo.svg';
-import RecipeCard from '../../components/recipe-card/RecipeCard';
+import RecipeCard from '../recipe-card/RecipeCard';
+import MockControls from "../mock-controls/MockControls";
 
 export default function template() {
     return (
-        <div className={styles.App}>
-            <header className={styles["App-header"]}>
-                <img src={logo} className={styles["App-logo"]} alt="logo" />
-                <RecipeCard></RecipeCard>
+        <div>
+            <header className={styles.header}>
+                <MockControls
+                    onGetHtmlStart={this.parseRecipeStart}
+                    onGetHtmlComplete={this.parseRecipeSuccess}
+                    onGetHtmlError={this.parseRecipeError}/>
+                <RecipeCard
+                    loading={this.state.loading}
+                    error={this.state.error}
+                    recipe={this.state.recipe}/>
             </header>
         </div>
     );
