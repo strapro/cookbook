@@ -23,7 +23,7 @@ export default class ImageExtractor extends BaseExtractor {
             let recipe = this.getSingleFromArray(metadata.rdfa['@graph'], (item) => item['og:image'] !== undefined);
 
             if (recipe) {
-                return this.getActualValue(recipe['og:image']);
+                return this.getActualValue(this.getSingleFromArray(recipe['og:image']));
             }
         }
 
